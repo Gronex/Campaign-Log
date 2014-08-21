@@ -1,12 +1,27 @@
 {% load url from future %}
 
-<h2>Campaigns</h2>
+<h2><a href="{% url 'campaign-list' %}" title="View all campaigns">Campaigns</a></h2>
+
+<form action="{% url 'campaign-list' %}" method="post">
+    <input type="text" name="title" />
+    <input type="submit" value="Create Campaign" />
+</form>
 
 <ul>
     {% for campaign in campaigns %}
         <li>
-            <!-- this URL is built manually -->
-            <a href="/campaigns/{{campaign.id}}/">{{campaign.title}}</a>
+            <!-- this URL is built automaticaly -->
+            <a href="{% url 'campaign-instance' campaign.id %}">{{campaign.title}}</a>
+        </li>
+    {% endfor %}
+</ul>
+</br>
+
+<h2><a href="{% url 'log-list' %}" title="View all campaigns">Logs</a></h2>
+<ul>
+    {% for log in logs %}
+        <li>
+            <a href="{% url 'log-instance' log.id %}">{{log.title}}</a>
         </li>
     {% endfor %}
 </ul>

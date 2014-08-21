@@ -11,25 +11,26 @@ from Campaign_Log.serializers import CampaignSerializer, LogSerializer, Characte
 
 def index_view(request):
     response = {
-        'campaigns': Campaign.objects.all()
+        'campaigns': Campaign.objects.all(),
+        'logs': Log.objects.all()
     }
 
     return render(request, 'index.html', response)
 
 
-class CampaignView(generics.ListAPIView):
+class CampaignView(generics.ListCreateAPIView):
     model = Campaign
     serializer_class = CampaignSerializer
 
-class LogView(generics.ListAPIView):
+class LogView(generics.ListCreateAPIView):
     model = Log
     serializer_class = LogSerializer
 
-class CharacterView(generics.ListAPIView):
+class CharacterView(generics.ListCreateAPIView):
     model = Character
     serializer_class = CharacterSerializer
 
-class LocationView(generics.ListAPIView):
+class LocationView(generics.ListCreateAPIView):
     model = Location
     serializer_class = LocationSerializer
 
@@ -37,3 +38,15 @@ class LocationView(generics.ListAPIView):
 class CampaignInstanceView(generics.RetrieveAPIView):
     model = Campaign
     serializer_class = CampaignSerializer
+
+class LogInstanceView(generics.RetrieveAPIView):
+    model = Log
+    serializer_class = LogSerializer
+
+class CharacterInstanceView(generics.RetrieveAPIView):
+    model = Character
+    serializer_class = CharacterSerializer
+
+class LocationInstanceView(generics.RetrieveAPIView):
+    model = Location
+    serializer_class = LocationSerializer

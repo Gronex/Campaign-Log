@@ -42,3 +42,4 @@ class Location(models.Model):
     description = models.TextField()
     locationType = models.CharField(choices = LOCATION_TYPES, max_length=100)
     campaign = models.ForeignKey('Campaign', related_name='locations')
+    pass

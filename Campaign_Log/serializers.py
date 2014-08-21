@@ -14,7 +14,6 @@ class LogSerializer(serializers.HyperlinkedModelSerializer):
         model = Log
         fields = ('id','created', 'title', 'content')
 
-
 class CharacterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Character
@@ -26,11 +25,11 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'description', 'locationType')
 
 class CampaignSerializer(serializers.HyperlinkedModelSerializer):
-    logs = LogSerializer(many=True)
-    characters = CharacterSerializer(many=True)
-    locations = LocationSerializer(many=True)
+    logs = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='log-instance')
+    characters = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='character-instance')
+    locations = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='location-instance')
     # users = UserSerializer(many=True)
 
     class Meta:
         model = Campaign
-        fields = ('id', 'title', 'logs', 'characters', 'locations')
+        fields = ('title', 'logs', 'characters', 'locations')
