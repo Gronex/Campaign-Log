@@ -1,0 +1,12 @@
+{% load url from future %}
+
+<h2>Campaigns</h2>
+
+<ul>
+    {% for campaign in campaigns %}
+        <li>
+            <!-- this URL is built manually -->
+            <a href="/campaigns/{{campaign.id}}/">{{campaign.title}}</a>
+        </li>
+    {% endfor %}
+</ul>

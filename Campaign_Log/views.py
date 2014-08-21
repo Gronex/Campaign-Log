@@ -9,6 +9,13 @@ from rest_framework import generics
 from Campaign_Log.serializers import CampaignSerializer, LogSerializer, CharacterSerializer, LocationSerializer
 # Create your views here.
 
+def index_view(request):
+    response = {
+        'campaigns': Campaign.objects.all()
+    }
+
+    return render(request, 'index.html', response)
+
 
 class CampaignView(generics.ListAPIView):
     model = Campaign
