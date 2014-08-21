@@ -1,9 +1,5 @@
 from django.shortcuts import render
 
-#from django.http import HttpResponse
-#from django.views.decorators.csrf import csrf_exempt
-#from rest_framework.renderers import JSONRenderer
-#from rest_framework.parsers import JSONParser
 from Campaign_Log.models import Campaign, Log, Character, Location
 from rest_framework import generics
 from Campaign_Log.serializers import CampaignSerializer, LogSerializer, CharacterSerializer, LocationSerializer
@@ -12,7 +8,9 @@ from Campaign_Log.serializers import CampaignSerializer, LogSerializer, Characte
 def index_view(request):
     response = {
         'campaigns': Campaign.objects.all(),
-        'logs': Log.objects.all()
+        'logs': Log.objects.all(),
+        'characters': Character.objects.all(),
+        'locations': Location.objects.all(),
     }
 
     return render(request, 'index.html', response)
@@ -34,19 +32,18 @@ class LocationView(generics.ListCreateAPIView):
     model = Location
     serializer_class = LocationSerializer
 
-
-class CampaignInstanceView(generics.RetrieveAPIView):
+class CampaignInstanceView(generics.RetrieveUpdateAPIView):
     model = Campaign
     serializer_class = CampaignSerializer
 
-class LogInstanceView(generics.RetrieveAPIView):
+class LogInstanceView(generics.RetrieveUpdateAPIView):
     model = Log
     serializer_class = LogSerializer
 
-class CharacterInstanceView(generics.RetrieveAPIView):
+class CharacterInstanceView(generics.RetrieveUpdateAPIView):
     model = Character
     serializer_class = CharacterSerializer
 
-class LocationInstanceView(generics.RetrieveAPIView):
+class LocationInstanceView(generics.RetrieveUpdateAPIView):
     model = Location
     serializer_class = LocationSerializer
