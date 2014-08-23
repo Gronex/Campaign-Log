@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-LOCATION_TYPES = (('F', 'Forrest'), ('C','City'), ('V','Village'), ('P','Planes'), ('OC','Ocean'), ('OT','Other'))
 
 class CampaignManager(models.Manager):
     pass
@@ -30,7 +29,7 @@ class Character(models.Model):
     objects = CharacterManager()
     name = models.CharField(max_length = 100, blank=True, default='')
     description = models.TextField()
-    assosiatedLocation = models.ForeignKey('Location')
+    assosiatedLocation = models.ForeignKey('Location', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='characters')
 
 class LocationManager(models.Manager):
@@ -38,8 +37,8 @@ class LocationManager(models.Manager):
 
 class Location(models.Model):
     objects = LocationManager()
-    name = models.CharField(max_length = 100, blank=True, default='')
-    description = models.TextField()
-    locationType = models.CharField(choices = LOCATION_TYPES, max_length=100)
+    name = models.CharField(max_length = 100)
+    description = models.TextField(blank=True)
+    locationType = models.CharField(default='None',max_length=100)
     campaign = models.ForeignKey('Campaign', related_name='locations')
     pass
