@@ -1,5 +1,5 @@
-{% load url from future %}
-
+{% extends 'base.html' %}
+{% block content %}
 <h2><a href="{% url 'campaign-list' %}" title="View all campaigns">Campaigns</a></h2>
 
 <form action="{% url 'campaign-list' %}" method="post">
@@ -97,3 +97,4 @@
         {% endfor %}
     </ul>
 </div>
+{% endblock %}
