@@ -27,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^logs/(?P<pk>[\d]+)/$',views.LogInstanceView.as_view(), name='log-instance'),
     url(r'^characters/(?P<pk>[\d]+)/$',views.CharacterInstanceView.as_view(), name='character-instance'),
     url(r'^locations/(?P<pk>[\d]+)/$',views.LocationInstanceView.as_view(), name='location-instance'),
+
+    url(r'^mycampaigns/$', views.campaignListView, name='my-campaign-list'),
+    url(r'^mycampaigns/(?P<pk>[\d]+)/$', views.myCampaignView, name='my-campaign'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)

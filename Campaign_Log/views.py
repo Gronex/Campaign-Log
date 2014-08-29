@@ -7,13 +7,28 @@ from Campaign_Log.serializers import CampaignSerializer, LogSerializer, Characte
 
 def index_view(request):
     response = {
-        'campaigns': Campaign.objects.all(),
         'logs': Log.objects.all(),
         'characters': Character.objects.all(),
         'locations': Location.objects.all(),
     }
 
     return render(request, 'index.html', response)
+
+def campaignListView(request):
+    response = {
+        'campaigns': Campaign.objects.all(),
+    }
+    return render(request, 'campaignList.html', response)
+
+def myCampaignView(request, pk):
+    campaign = Campaign.objects.get(pk=pk)
+    response = {
+        'campaign': campaign,
+        'logs': Log.objects.filter(campaign=campaign),
+        'characters': Character.objects.filter(campaign=campaign),
+        'locations': Location.objects.filter(campaign=campaign),
+    }
+    return render(request, 'campaign.html', response)
 
 
 class CampaignView(generics.ListCreateAPIView):

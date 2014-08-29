@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2><a href="{% url 'campaign-list' %}" title="View all campaigns">Campaigns</a></h2>
+
+<!-- List all the individual campaigns by name -->
+<ul>
+    {% for campaign in campaigns %}
+        <li>
+            <!-- this URL is built automaticaly -->
+            <a href="{% url 'my-campaign' campaign.id %}">{{campaign.title}}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<!-- Create new campaign -->
+<h3>Create new campaign</h3>
+<form action="{% url 'campaign-list' %}" method="post">
+    <input type="text" name="title" />
+    <input type="submit" value="Create Campaign" />
+</form>
+
+{% endblock %}
