@@ -8,10 +8,17 @@
 <ul>
     {% for log in logs %}
     <li>
-        <a href="{% url 'log-instance' log.id %}">{{log.title}}</a>
+        <a href="{% url 'my-log' campaign.id log.id %}">{{log.title}}</a>
     </li>
     {% endfor %}
 </ul>
+
+<h4>Create Log:</h4>
+<form action="{% url 'log-list' %}" method="post">
+    <input type="hidden" value="{% url 'campaign-instance' campaign.id %}" name="campaign" />
+    Title: <input type="text" name="title" required /><br>
+    <input type="submit" value="Create Log" />
+</form>
 
 <h3>Characters</h3>
 <ul>
@@ -22,6 +29,14 @@
     {% endfor %}
 </ul>
 
+<h4>Create Location:</h4>
+<form action="{% url 'location-list' %}" method="post">
+    <input type="hidden" value="{% url 'campaign-instance' campaign.id %}" name="campaign" />
+    Name: <input type="text" name="name" required /><br>
+    Type: <input type="text" name="locationType" /><br>
+    <input type="submit" value="Create Location" />
+</form>
+
 <h3>Locations</h3>
 <ul>
     {% for location in locations %}
@@ -30,5 +45,12 @@
     </li>
     {% endfor %}
 </ul>
+
+<h4>Create Character:</h4>
+<form action="{% url 'character-list' %}" method="post">
+    <input type="hidden" value="{% url 'campaign-instance' campaign.id %}" name="campaign" />
+    Name: <input type="text" name="name" required /><br>
+    <input type="submit" value="Create Location" />
+</form>
 
 {% endblock %}

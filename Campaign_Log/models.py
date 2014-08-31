@@ -16,7 +16,7 @@ class Log(models.Model):
     objects = LogManager()
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
-    content = models.TextField()
+    content = models.TextField(blank=True, default='')
     campaign = models.ForeignKey('Campaign', related_name='logs')
 
     class Meta:
@@ -28,7 +28,7 @@ class CharacterManager(models.Manager):
 class Character(models.Model):
     objects = CharacterManager()
     name = models.CharField(max_length = 100, blank=True, default='')
-    description = models.TextField()
+    description = models.TextField(blank=True, default='')
     assosiatedLocation = models.ForeignKey('Location', blank=True, null=True)
     campaign = models.ForeignKey('Campaign', related_name='characters')
 
@@ -38,7 +38,7 @@ class LocationManager(models.Manager):
 class Location(models.Model):
     objects = LocationManager()
     name = models.CharField(max_length = 100)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, default='')
     locationType = models.CharField(default='None',max_length=100)
     campaign = models.ForeignKey('Campaign', related_name='locations')
     pass

@@ -6,12 +6,12 @@ from Campaign_Log.serializers import CampaignSerializer, LogSerializer, Characte
 # Create your views here.
 
 def index_view(request):
+    #TODO: Make some kind of news blog
     response = {
         'logs': Log.objects.all(),
         'characters': Character.objects.all(),
         'locations': Location.objects.all(),
     }
-
     return render(request, 'index.html', response)
 
 def campaignListView(request):
@@ -29,6 +29,15 @@ def myCampaignView(request, pk):
         'locations': Location.objects.filter(campaign=campaign),
     }
     return render(request, 'campaign.html', response)
+
+def myLogView(request, campaignkey, logkey):
+    campaign = Campaign.objects.get(pk=campaignkey)
+    log = Log.objects.get(pk=logkey)
+    response = {
+        'campaign': campaign,
+        'log': log,
+    }
+    return render(request, 'log.html', response)
 
 
 class CampaignView(generics.ListCreateAPIView):

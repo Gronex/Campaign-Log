@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{% url 'log-instance' log.id %}" method="post">
+    <input type="hidden" name="_method" value="put" />
+    <input type="hidden" value="{% url 'campaign-instance' campaign.id %}" name="campaign" />
+    Title: <input type="text" name="title" value="{{log.title}}" required /><br>
+    <textarea rows="4" cols="50" name="content">{{log.content}}</textarea><br>
+    <input type="submit" value="Save" />
+</form>
+
+{% endblock %}

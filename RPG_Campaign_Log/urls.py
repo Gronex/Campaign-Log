@@ -30,6 +30,7 @@ urlpatterns = patterns('',
 
     url(r'^mycampaigns/$', views.campaignListView, name='my-campaign-list'),
     url(r'^mycampaigns/(?P<pk>[\d]+)/$', views.myCampaignView, name='my-campaign'),
+    url(r'^mycampaigns/(?P<campaignkey>[\d]+)/(?P<logkey>[\d]+)/$', views.myLogView, name='my-log'),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
