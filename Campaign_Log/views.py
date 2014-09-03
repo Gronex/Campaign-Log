@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.forms import ModelForm
+from django.core.urlresolvers import reverse
+from django.views.generic import CreateView
 
 from Campaign_Log.models import Campaign, Log, Character, Location
 from rest_framework import generics
@@ -33,12 +36,25 @@ def myCampaignView(request, pk):
 def myLogView(request, campaignkey, logkey):
     campaign = Campaign.objects.get(pk=campaignkey)
     log = Log.objects.get(pk=logkey)
+
+    logform = LogForm
     response = {
         'campaign': campaign,
         'log': log,
+        'logform': logform,
     }
     return render(request, 'log.html', response)
 
+class LogForm(ModelForm):
+    class Meta:
+        model = Log
+        fields = ('title', 'content')
+
+
+class CampaignForm(ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ('title',)
 
 class CampaignView(generics.ListCreateAPIView):
     model = Campaign
@@ -71,3 +87,11 @@ class CharacterInstanceView(generics.RetrieveUpdateAPIView):
 class LocationInstanceView(generics.RetrieveUpdateAPIView):
     model = Location
     serializer_class = LocationSerializer
+
+
+
+class CreateLogView(CreateView):
+    model = Log
+    template_name = 'new-log.html'
+    def get_success_url(self):
+        return reverse('my-campaign-list')

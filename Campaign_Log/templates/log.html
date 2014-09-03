@@ -10,4 +10,9 @@
     <input type="submit" value="Save" />
 </form>
 
+<form method="post" action="{% url 'log-instance' log.id %}" class="uniForm">
+    <input type="hidden" name="_method" value="put" />
+    {{ logform}}
+    <input type="submit" value="Save" />
+</form>
 {% endblock %}

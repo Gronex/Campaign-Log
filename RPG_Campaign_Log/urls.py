@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
-
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework import routers
 from Campaign_Log import views
@@ -31,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^campaigns/$', views.campaignListView, name='my-campaign-list'),
     url(r'^campaigns/(?P<pk>[\d]+)/$', views.myCampaignView, name='my-campaign'),
     url(r'^campaigns/(?P<campaignkey>[\d]+)/(?P<logkey>[\d]+)/$', views.myLogView, name='my-log'),
+
+    url(r'^logs/new$', views.CreateLogView.as_view(), name='log-new',),
 )
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns += staticfiles_urlpatterns()
