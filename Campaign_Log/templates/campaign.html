@@ -13,6 +13,10 @@
     {% endfor %}
 </ul>
 
+<ul class="nav nav-pills nav-inverse">
+    <li class="active"><a href="{% url 'log-new' %}">Create new log</a></li>
+</ul>
+
 <h4>Create Log:</h4>
 <form action="{% url 'log-list' %}" method="post">
     <input type="hidden" value="{% url 'campaign-instance' campaign.id %}" name="campaign" />
