@@ -8,7 +8,7 @@
 <ul>
     {% for log in logs %}
     <li>
-        <a href="{% url 'my-log' campaign.id log.id %}">{{log.title}}</a>
+        <a href="{% url 'log-edit' pk=log.id %}">{{log.title}}</a>
     </li>
     {% endfor %}
 </ul>
@@ -16,6 +16,20 @@
 <ul class="nav nav-pills nav-inverse">
     <li class="active"><a href="{% url 'log-new' %}">Create new log</a></li>
 </ul>
+</br>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <h4>Create Log:</h4>
 <form action="{% url 'log-list' %}" method="post">

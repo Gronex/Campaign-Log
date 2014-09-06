@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from Campaign_Log.models import Campaign, Log, Character, Location
 from rest_framework import generics
@@ -43,7 +43,7 @@ def myLogView(request, campaignkey, logkey):
         'log': log,
         'logform': logform,
     }
-    return render(request, 'log.html', response)
+    return render(request, 'update-log.html', response)
 
 class LogForm(ModelForm):
     class Meta:
@@ -92,6 +92,26 @@ class LocationInstanceView(generics.RetrieveUpdateAPIView):
 
 class CreateLogView(CreateView):
     model = Log
-    template_name = 'new-log.html'
+    template_name = 'edit_log.html'
     def get_success_url(self):
         return reverse('my-campaign-list')
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateLogView, self).get_context_data(**kwargs)
+        context["action"] = reverse('log-new')
+        return context
+
+class UpdateLogView(UpdateView):
+    model = Log
+    template_name = 'edit_log.html'
+    def get_success_url(self):
+        return reverse('my-campaign-list')#TODO: change to specific campaign
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateLogView, self).get_context_data(**kwargs)
+        context["action"] = reverse('log-edit', kwargs={'pk': self.get_object().id})
+        return context
+
+class DeleteLogView(DeleteView):
+    model = Log
+    template_name = 'delete_log.html'

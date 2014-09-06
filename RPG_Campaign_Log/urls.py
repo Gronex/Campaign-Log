@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^campaigns/(?P<campaignkey>[\d]+)/(?P<logkey>[\d]+)/$', views.myLogView, name='my-log'),
 
     url(r'^logs/new$', views.CreateLogView.as_view(), name='log-new',),
+    url(r'^logs/edit/(?P<pk>\d+)/$', views.UpdateLogView.as_view(), name='log-edit',),
 )
 
 urlpatterns += staticfiles_urlpatterns()

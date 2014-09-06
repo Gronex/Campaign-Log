@@ -2,9 +2,13 @@
 
 {% block content %}
 
-<h1>Add Log</h1>
+{% if log.id %}
+<h1>Edit {{log.title}}</h1>
+{% else %}
+<h1>Create Log</h1>
+{% endif %}
 
-<form action="{% url "log-new" %}" method="POST">
+<form action="{{ action }}" method="POST">
   {% csrf_token %}
   <ul>
     {{ form.as_ul }}
