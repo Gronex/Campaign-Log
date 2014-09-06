@@ -33,6 +33,7 @@ urlpatterns = patterns('',
 
     url(r'^logs/new$', views.CreateLogView.as_view(), name='log-new',),
     url(r'^logs/edit/(?P<pk>\d+)/$', views.UpdateLogView.as_view(), name='log-edit',),
+    url(r'^logs/delete/(?P<pk>\d+)/$', views.DeleteLogView.as_view(), name='log-delete',),
 )
 
 urlpatterns += staticfiles_urlpatterns()

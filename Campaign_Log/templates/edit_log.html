@@ -10,12 +10,15 @@
 
 <form action="{{ action }}" method="POST">
   {% csrf_token %}
-  <ul>
-    {{ form.as_ul }}
-  </ul>
-  <input id="save_log" type="submit" value="Save" />
+    <ul>
+        {{ form.as_p }}
+    </ul>
+  <input id="save_log" class="btn btn-default" type="submit" value="Save" />
 </form>
-
+{% if log.id %}
+<a href="{% url "log-delete" pk=log.id %}">Delete</a>
+<br />
+{% endif %}
 <a href="{% url "my-campaign-list" %}">back to list</a>
 
 {% endblock %}

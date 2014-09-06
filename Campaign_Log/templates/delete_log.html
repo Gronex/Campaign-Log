@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Delete log: {{log.title}}?</h1>
+
+<p>Are you sure you want to delete the contact {{ contact }}?</p>
+
+<form action="{% url "log-delete" pk=log.id %}" method="POST">
+    {% csrf_token %}
+
+    <input type="submit" class="btn btn-default" value="Delete" />
+    <a href="{% url "my-campaign-list" %}"><input class="btn btn-default" type="button" value="Cancel" /></a ><!--TODO: change redirrect target -->
+</form>
+
+{% endblock %}

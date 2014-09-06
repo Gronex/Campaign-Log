@@ -94,7 +94,7 @@ class CreateLogView(CreateView):
     model = Log
     template_name = 'edit_log.html'
     def get_success_url(self):
-        return reverse('my-campaign-list')
+        return reverse('my-campaign-list')#TODO: change to specific campaign
 
     def get_context_data(self, **kwargs):
         context = super(CreateLogView, self).get_context_data(**kwargs)
@@ -115,3 +115,6 @@ class UpdateLogView(UpdateView):
 class DeleteLogView(DeleteView):
     model = Log
     template_name = 'delete_log.html'
+
+    def get_success_url(self):
+        return reverse('my-campaign-list')#TODO: change to specific campaign
