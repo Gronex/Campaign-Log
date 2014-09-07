@@ -6,7 +6,7 @@
 
 <h3>Logs</h3>
 <ul>
-    {% for log in logs %}
+    {% for log in campaign.logs.all %}
     <li>
         <a href="{% url 'log-edit' pk=log.id %}">{{log.title}}</a>
     </li>
