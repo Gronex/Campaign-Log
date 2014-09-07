@@ -2,10 +2,10 @@
 
 {% block content %}
 
-{% if log.id %}
-<h1>Edit {{log.title}}</h1>
+{% if campaign.id %}
+<h1>Edit {{campaign.title}}</h1>
 {% else %}
-<h1>Create Log</h1>
+<h1>Create Campaign</h1>
 {% endif %}
 
 <form action="{{ action }}" method="POST">
@@ -13,12 +13,8 @@
     <ul>
         {{ form.as_p }}
     </ul>
-  <input id="save_log" class="btn btn-default" type="submit" value="Save" />
+  <input id="save_campaign" class="btn btn-default" type="submit" value="Create" />
 </form>
-{% if log.id %}
-<a href="{% url "log-delete" pk=log.id %}">Delete</a>
-<br />
-{% endif %}
 <a href="{% url "campaign-list" %}">back to list</a>
 
 {% endblock %}

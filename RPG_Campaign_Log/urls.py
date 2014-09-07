@@ -13,23 +13,28 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'RPG_Campaign_Log.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
+
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index_view, name='index_view'),
     # url(r'^', include('Campaign_Log.urls')),
-    url(r'^api/campaigns/$', views.CampaignView.as_view(), name = 'campaign-list'),
-    url(r'^api/logs/$', views.LogView.as_view(), name = 'log-list'),
-    url(r'^api/characters/$', views.CharacterView.as_view(), name = 'character-list'),
-    url(r'^api/locations/$', views.LocationView.as_view(), name = 'location-list'),
+    url(r'^api/campaigns/$', views.CampaignAPIView.as_view(), name = 'api-campaign-list'),
+    url(r'^api/logs/$', views.LogView.as_view(), name = 'api-log-list'),
+    url(r'^api/characters/$', views.CharacterView.as_view(), name = 'api-character-list'),
+    url(r'^api/locations/$', views.LocationView.as_view(), name = 'api-location-list'),
 
-    url(r'^api/campaigns/(?P<pk>[\d]+)/$',views.CampaignInstanceView.as_view(), name='campaign-instance'),
-    url(r'^api/logs/(?P<pk>[\d]+)/$',views.LogInstanceView.as_view(), name='log-instance'),
-    url(r'^api/characters/(?P<pk>[\d]+)/$',views.CharacterInstanceView.as_view(), name='character-instance'),
-    url(r'^api/locations/(?P<pk>[\d]+)/$',views.LocationInstanceView.as_view(), name='location-instance'),
+    url(r'^api/campaigns/(?P<pk>[\d]+)/$',views.CampaignInstanceView.as_view(), name='api-campaign-instance'),
+    url(r'^api/logs/(?P<pk>[\d]+)/$',views.LogInstanceView.as_view(), name='api-log-instance'),
+    url(r'^api/characters/(?P<pk>[\d]+)/$',views.CharacterInstanceView.as_view(), name='api-character-instance'),
+    url(r'^api/locations/(?P<pk>[\d]+)/$',views.LocationInstanceView.as_view(), name='api-location-instance'),
 
-    url(r'^campaigns/$', views.campaignListView, name='my-campaign-list'),
-    url(r'^campaigns/(?P<pk>[\d]+)/$', views.myCampaignView, name='my-campaign'),
-    url(r'^campaigns/(?P<campaignkey>[\d]+)/(?P<logkey>[\d]+)/$', views.myLogView, name='my-log'),
+#   nonAPI sites
+
+    url(r'^campaigns/$', views.ListCampaignView.as_view(), name='campaign-list'),
+    url(r'^campaigns/new$', views.CreateCampaignView.as_view(), name='campaign-new',),
+    url(r'^campaigns/(?P<pk>\d+)/$', views.CampaignView.as_view(), name='campaign',),
 
     url(r'^logs/new$', views.CreateLogView.as_view(), name='log-new',),
     url(r'^logs/edit/(?P<pk>\d+)/$', views.UpdateLogView.as_view(), name='log-edit',),

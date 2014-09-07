@@ -1,12 +1,35 @@
 from django.shortcuts import render
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from Campaign_Log.models import Campaign, Log, Character, Location
 from rest_framework import generics
 from Campaign_Log.serializers import CampaignSerializer, LogSerializer, CharacterSerializer, LocationSerializer
 # Create your views here.
+
+class LoggedInMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoggedInMixin, self).dispatch(*args, **kwargs)
+
+class CampaignMemberMixin(object):
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        queryset = queryset.filter(
+            pk=pk,
+            member = self.request.user,
+        )
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_(u"No %(verbose_name)s found matching the query") %{'verbose_name': queryset.model_meta.verbose_name})
+        return obj
 
 def index_view(request):
     #TODO: Make some kind of news blog
@@ -17,46 +40,7 @@ def index_view(request):
     }
     return render(request, 'index.html', response)
 
-def campaignListView(request):
-    response = {
-        'campaigns': Campaign.objects.all(),
-    }
-    return render(request, 'campaignList.html', response)
-
-def myCampaignView(request, pk):
-    campaign = Campaign.objects.get(pk=pk)
-    response = {
-        'campaign': campaign,
-        'logs': Log.objects.filter(campaign=campaign),
-        'characters': Character.objects.filter(campaign=campaign),
-        'locations': Location.objects.filter(campaign=campaign),
-    }
-    return render(request, 'campaign.html', response)
-
-def myLogView(request, campaignkey, logkey):
-    campaign = Campaign.objects.get(pk=campaignkey)
-    log = Log.objects.get(pk=logkey)
-
-    logform = LogForm
-    response = {
-        'campaign': campaign,
-        'log': log,
-        'logform': logform,
-    }
-    return render(request, 'update-log.html', response)
-
-class LogForm(ModelForm):
-    class Meta:
-        model = Log
-        fields = ('title', 'content')
-
-
-class CampaignForm(ModelForm):
-    class Meta:
-        model = Campaign
-        fields = ('title',)
-
-class CampaignView(generics.ListCreateAPIView):
+class CampaignAPIView(generics.ListCreateAPIView):
     model = Campaign
     serializer_class = CampaignSerializer
 
@@ -90,31 +74,55 @@ class LocationInstanceView(generics.RetrieveUpdateAPIView):
 
 
 
-class CreateLogView(CreateView):
+class CampaignView(LoggedInMixin, CampaignMemberMixin, DetailView):
+    model = Campaign
+    template_name = 'campaign.html'
+
+
+class ListCampaignView(LoggedInMixin, ListView):
+    model = Campaign
+    template_name = 'campaignList.html'
+
+    def get_queryset(self):
+        return Campaign.objects.filter(member = self.request.user)
+
+class CreateCampaignView(LoggedInMixin, CreateView):
+    model = Campaign
+    template_name = 'edit_campaign.html'
+
+    def get_success_url(self):
+        return reverse('campaign-list')
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateCampaignView, self).get_context_data(**kwargs)
+        context["action"] = reverse('campaign-new')
+        return context
+
+class CreateLogView(LoggedInMixin, CreateView):
     model = Log
     template_name = 'edit_log.html'
     def get_success_url(self):
-        return reverse('my-campaign-list')#TODO: change to specific campaign
+        return reverse('campaign-list')#TODO: change to specific campaign
 
     def get_context_data(self, **kwargs):
         context = super(CreateLogView, self).get_context_data(**kwargs)
         context["action"] = reverse('log-new')
         return context
 
-class UpdateLogView(UpdateView):
+class UpdateLogView(LoggedInMixin, UpdateView):
     model = Log
     template_name = 'edit_log.html'
     def get_success_url(self):
-        return reverse('my-campaign-list')#TODO: change to specific campaign
+        return reverse('campaign-list')#TODO: change to specific campaign
 
     def get_context_data(self, **kwargs):
         context = super(UpdateLogView, self).get_context_data(**kwargs)
         context["action"] = reverse('log-edit', kwargs={'pk': self.get_object().id})
         return context
 
-class DeleteLogView(DeleteView):
+class DeleteLogView(LoggedInMixin, DeleteView):
     model = Log
     template_name = 'delete_log.html'
 
     def get_success_url(self):
-        return reverse('my-campaign-list')#TODO: change to specific campaign
+        return reverse('campaign-list')#TODO: change to specific campaign
