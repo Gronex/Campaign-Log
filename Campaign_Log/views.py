@@ -5,6 +5,10 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView, D
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+#ERROR handeling
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+
 from Campaign_Log.models import Campaign, Log, Character, Location
 from rest_framework import generics
 from Campaign_Log.serializers import CampaignSerializer, LogSerializer, CharacterSerializer, LocationSerializer
@@ -28,7 +32,29 @@ class CampaignMemberMixin(object):
         try:
             obj = queryset.get()
         except ObjectDoesNotExist:
-            raise Http404(_(u"No %(verbose_name)s found matching the query") %{'verbose_name': queryset.model_meta.verbose_name})
+            raise Http404(u"No objects found matching the query")
+        return obj
+
+class LogMemberMixin(object):
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        queryset = queryset.filter(
+            pk=pk,
+        )
+
+        try:
+            obj = queryset.select_related().get()
+
+            # Make sure the user has access to the log by checking if the log is in a campaign the user can use
+            Campaign.objects.filter(
+            logs = obj,
+            member = self.request.user,
+            ).get()
+
+        except ObjectDoesNotExist:
+            raise Http404(u"No objects found matching the query")
         return obj
 
 def index_view(request):
@@ -109,7 +135,7 @@ class CreateLogView(LoggedInMixin, CreateView):
         context["action"] = reverse('log-new')
         return context
 
-class UpdateLogView(LoggedInMixin, UpdateView):
+class UpdateLogView(LoggedInMixin,LogMemberMixin, UpdateView):
     model = Log
     template_name = 'edit_log.html'
     def get_success_url(self):
@@ -120,7 +146,7 @@ class UpdateLogView(LoggedInMixin, UpdateView):
         context["action"] = reverse('log-edit', kwargs={'pk': self.get_object().id})
         return context
 
-class DeleteLogView(LoggedInMixin, DeleteView):
+class DeleteLogView(LoggedInMixin, LogMemberMixin, DeleteView):
     model = Log
     template_name = 'delete_log.html'
 
